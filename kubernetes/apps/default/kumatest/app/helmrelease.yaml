@@ -18,7 +18,7 @@ spec:
               repository: ghcr.io/louislam/uptime-kuma
               tag: 2.0.2
             env:
-              HTTP_PORT: &port 3000
+              HTTP_PORT: &port 3001
               LOG_WITHOUT_NEWLINE: true
               LOG_IGNORE_PATH: /healthz
               PROMETHEUS_ENABLED: true
@@ -57,12 +57,12 @@ spec:
     serviceMonitor:
       app:
         endpoints:
-          - port: http
+          - port: https
     route:
       app:
         hostnames: ["{{ .Release.Name }}.${SECRET_DOMAIN}"]
         parentRefs:
-          - name: envoy-external
+          - name: envoy-internal
             namespace: network
             sectionName: https
         rules:
