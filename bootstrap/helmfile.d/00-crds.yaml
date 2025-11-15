@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
 
 # This helmfile is for extracting and installing Custom Resource Definitions (CRDs) from Helm charts.
 # It is not intended to be used with helmfile apply or helmfile sync.
@@ -10,7 +11,7 @@ helmDefaults:
   postRenderer: bash
   postRendererArgs:
     - -c
-    - yq eval-all --exit-status 'select(.kind == "CustomResourceDefinition")'
+    - yq ea -e 'select(.kind == "CustomResourceDefinition")'
 
 releases:
   - name: cloudflare-dns
@@ -22,6 +23,16 @@ releases:
     namespace: network
     chart: oci://mirror.gcr.io/envoyproxy/gateway-helm
     version: v1.6.0
+
+  - name: grafana-operator
+    namespace: observability
+    chart: oci://ghcr.io/grafana/helm-charts/grafana-operator
+    version: v5.20.0
+
+  - name: keda
+    namespace: observability
+    chart: oci://ghcr.io/home-operations/charts-mirror/keda
+    version: 2.18.1
 
   - name: kube-prometheus-stack
     namespace: observability
